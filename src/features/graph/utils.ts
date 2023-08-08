@@ -17,12 +17,14 @@ export const getDomain = () => {
   }
 }
 
+const nodesMap = new Map(nodes.map((node) => [node.id, node]))
+
 export const getLine = (
   edge: (typeof edges)[number],
   xScale: d3.ScaleLinear<number, number, never>
 ) => {
-  const source = nodes.find((node) => node.id === edge.source.node)
-  const target = nodes.find((node) => node.id === edge.target.node)
+  const source = nodesMap.get(edge.source.node)
+  const target = nodesMap.get(edge.target.node)
 
   const line = d3
     .line()
@@ -42,6 +44,6 @@ export const getLine = (
     target.pos[1] + targetConnectionOffset[1],
   ]
   const pointsArr = [sourceConnection, ...points, targetConnection]
-  //@ts-expect-error issue with the type of an array an it being readonly
+  // @ts-expect-error issue with the type of an array an it being readonly
   return line(pointsArr)
 }
